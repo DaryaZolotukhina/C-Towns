@@ -12,7 +12,7 @@ using namespace std;
 
 const int maxPath = 100000;
 
-bool CheckTop(int **Matr, int Num, int n, int & sum) {
+int CheckTop(int **Matr, int Num, int n) {
 	//реализация алгоритма Дейкстры
 	/*Создание матрицы коротких путей*/
 	int *ShortPath = new int[n];
@@ -20,7 +20,7 @@ bool CheckTop(int **Matr, int Num, int n, int & sum) {
 	bool *Visited = new bool[n];
 	//заполняем массивы посещенных городов и коротких путей
 	int i;
-	sum = 0;
+	int sum = 0;
 	for (i = 0; i < n; i++) {
 		ShortPath[i] = maxPath;
 		Visited[i] = false; //0 - не посещен, 1 - посещен
@@ -53,7 +53,7 @@ bool CheckTop(int **Matr, int Num, int n, int & sum) {
 
 
 	i = 0;
-	while (i < n && ShortPath[i] < maxPath) {
+	while (i < n) {
 		sum += ShortPath[i];
 		i++;
 	}
@@ -62,11 +62,8 @@ bool CheckTop(int **Matr, int Num, int n, int & sum) {
 	delete[] ShortPath;
 	delete[] Visited;
 
-	if (i == n) return true;
-	//else
-	return false;
-
-
+	return sum;
+	
 }
 
 int **CreateGraf(int n) {
@@ -152,16 +149,15 @@ int main() {
 	int sum = 0, minsum = maxPath;
 	int SearchTop = -1;
 	for (int i = 0; i < n; i++) {
-		if (CheckTop(Graf, i, n, sum) && (sum < minsum)) {
+		sum = CheckTop(Graf, i, n);
+		if (sum < minsum) {
 			SearchTop = i;
 			minsum = sum;
 		}
 	}
 
-	if (SearchTop == -1) {
-		cout << "Такого города нет" << endl;
-	}
-	else
+	
+
 		cout << "Искомый город - город номер " << SearchTop + 1 << ", сумма - " << minsum << endl;
 	
 	getchar();
